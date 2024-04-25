@@ -1,0 +1,52 @@
+type: ruleset
+ruleset_type: custom
+api_version: 2.0.0
+name: temp-res-set
+title: temp-res-set
+description: To test API Governance by T3 Group5 team by cli
+ruleset_version: 2.0.0
+ruleset_state: published
+rule_urls:
+  - https://management-compliance-cloud-service.apic.svc:3077/governance/orgs/f6e89292-9043-4fb9-a282-734532fc2727/rulesets/2.0.0-t3-group5-ruleset/rules/59fa2cb0-922d-4c1b-b104-4e515ecec056
+  - https://management-compliance-cloud-service.apic.svc:3077/governance/orgs/f6e89292-9043-4fb9-a282-734532fc2727/rulesets/2.0.0-t3-group5-ruleset/rules/f47084a7-0f41-4457-bb95-64b2c0fae875
+created_at: 2024-04-25 05:59:39.319+00
+updated_at: 2024-04-25T06:19:48.000Z
+url: https://management-compliance-cloud-service.apic.svc:3077/governance/orgs/f6e89292-9043-4fb9-a282-734532fc2727/rulesets/9207361c-3ff1-4f89-9cb1-de528999150c
+rules:
+  - api_version: 2.0.0
+    id: 59fa2cb0-922d-4c1b-b104-4e515ecec056
+    name: check-apikey-name
+    version: 2.0.0
+    title: check if default apikey used?
+    description: 'Make sure default apikey name "X-IBM-Client-Id" is not used '
+    message: "Please do not used X-IBM-Client-Id as name for apiKey.. "
+    given:
+      - $..[securityDefinitions][?(@.type=="apiKey")].name
+    severity: error
+    created_at: 2024-04-25T06:18:57.000Z
+    updated_at: 2024-04-25T06:19:48.000Z
+    url: https://management-compliance-cloud-service.apic.svc:3077/governance/orgs/f6e89292-9043-4fb9-a282-734532fc2727/rulesets/2.0.0-t3-group5-ruleset/rules/59fa2cb0-922d-4c1b-b104-4e515ecec056
+    then:
+      - function: pattern
+        functionOptions:
+          notMatch: ^(X-IBM-Client-Id)$
+  - api_version: 2.0.0
+    id: f47084a7-0f41-4457-bb95-64b2c0fae875
+    name: check-if-ibm-email-is-used
+    version: 2.0.0
+    title: Check if ibm email is used?
+    description: Check if ibm email is used in contacts?
+    message: Please make sure to add a valid ibm email on the contacts.
+    given:
+      - $
+    severity: warn
+    created_at: 2024-04-25T06:00:19.000Z
+    updated_at: 2024-04-25T06:19:48.000Z
+    url: https://management-compliance-cloud-service.apic.svc:3077/governance/orgs/f6e89292-9043-4fb9-a282-734532fc2727/rulesets/2.0.0-t3-group5-ruleset/rules/f47084a7-0f41-4457-bb95-64b2c0fae875
+    then:
+      - field: info.contact.email
+        function: truthy
+      - field: info.contact.email
+        function: pattern
+        functionOptions:
+          match: ^[\w-\.]+@ibm.com$
